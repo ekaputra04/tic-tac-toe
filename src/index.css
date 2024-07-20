@@ -13,6 +13,13 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  padding: 20px;
+}
+
+@media (max-width: 600px) {
+  .game {
+    flex-direction: column;
+  }
 }
 
 /* Header Styles */
@@ -37,6 +44,13 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
   margin-right: 20px; /* Added margin-right for spacing */
+}
+
+@media (max-width: 600px) {
+  .board {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
 }
 
 /* Square Styles */
