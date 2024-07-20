@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import React, { useState } from "react";
+import Confetti from "react-confetti";
 
 function Square({ value, onSquareClick }) {
-  // Gunakan destructuring untuk props
   return (
     <button onClick={onSquareClick} className="square">
       {value}
@@ -32,6 +32,7 @@ function Board({ xIsNext, squares, onPlay }) {
   } else {
     status = "Next Player: " + (xIsNext ? "X" : "O");
   }
+
   return (
     <>
       <div className="status">{status}</div>
@@ -50,20 +51,38 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
+function Modal({ winner, onClose }) {
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <h2>Congratulations!</h2>
+        <p>Winner: {winner}</p>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
+
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
-  const xIsNext = currentMove % 2 == 0;
+  const [showModal, setShowModal] = useState(false);
+  const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const winner = calculateWinner(currentSquares);
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
+    setShowModal(false);
   }
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
+    if (calculateWinner(nextSquares)) {
+      setShowModal(true);
+    }
   }
 
   const moves = history.map((squares, move) => {
@@ -83,6 +102,11 @@ export default function Game() {
 
   return (
     <>
+      {winner && <Confetti />}
+      {showModal && (
+        <Modal winner={winner} onClose={() => setShowModal(false)} />
+      )}
+      <h1>Tic Tac Toe</h1>
       <div className="game">
         <div className="game-board">
           <Board
@@ -112,14 +136,11 @@ function calculateWinner(squares) {
   ];
 
   for (let i = 0; i < lines.length; i++) {
-    const a = lines[i][0];
-    const b = lines[i][1];
-    const c = lines[i][2];
-
-    if (squares[a] && squares[a] == squares[b] && squares[a] == squares[c]) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return squares[a];
     }
   }
 
-  return false;
+  return null;
 }

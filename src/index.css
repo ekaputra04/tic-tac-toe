@@ -1,30 +1,151 @@
+/* Global Styles */
 * {
   box-sizing: border-box;
-}
-
-body {
-  font-family: sans-serif;
-  margin: 20px;
+  margin: 0;
   padding: 0;
 }
 
-.square {
-  width: 35px;
-  height: 35px;
-  border: 1px solid black;
-  background-color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.board {
+/* Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
   display: flex;
-  flex-wrap: wrap;
-  width: 105px;
-  height: 105px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
+/* Header Styles */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Game Container Styles */
 .game {
   display: flex;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Board Styles */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-right: 20px; /* Added margin-right for spacing */
+}
+
+/* Square Styles */
+.square {
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.square:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Game Info Styles */
+.game-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.game-info ol {
+  padding-left: 0;
+  list-style: none;
+  margin-top: 0;
+}
+
+.game-info button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.game-info button:hover {
+  background-color: #0056b3;
+}
+
+/* Status Styles */
+.status {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center; /* Center align the status text */
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: scale(0.8);
+  animation: modalFadeIn 0.3s forwards; /* Add animation */
+}
+
+@keyframes modalFadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal h2 {
+  margin-bottom: 10px;
+}
+
+.modal p {
+  margin-bottom: 20px;
+}
+
+.modal button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal button:hover {
+  background-color: #0056b3;
 }
