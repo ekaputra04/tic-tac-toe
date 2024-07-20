@@ -3,15 +3,18 @@
 import React, { useState } from "react";
 import Confetti from "react-confetti";
 
-function Square({ value, onSquareClick }) {
+function Square({ value, onSquareClick, isWinningSquare }) {
   return (
-    <button onClick={onSquareClick} className="square">
+    <button
+      onClick={onSquareClick}
+      className={`square ${isWinningSquare ? "winning-square" : ""}`}
+    >
       {value}
     </button>
   );
 }
 
-function Board({ xIsNext, squares, onPlay }) {
+function Board({ xIsNext, squares, onPlay, winningSquares }) {
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) return;
 
@@ -28,7 +31,7 @@ function Board({ xIsNext, squares, onPlay }) {
   const winner = calculateWinner(squares);
   let status = "";
   if (winner) {
-    status = "Winner: " + winner;
+    status = "Winner: " + winner.player;
   } else {
     status = "Next Player: " + (xIsNext ? "X" : "O");
   }
@@ -37,15 +40,14 @@ function Board({ xIsNext, squares, onPlay }) {
     <>
       <div className="status">{status}</div>
       <div className="board">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+        {squares.map((value, index) => (
+          <Square
+            key={index}
+            value={value}
+            onSquareClick={() => handleClick(index)}
+            isWinningSquare={winningSquares.includes(index)}
+          />
+        ))}
       </div>
     </>
   );
@@ -85,6 +87,12 @@ export default function Game() {
     }
   }
 
+  function restartGame() {
+    setHistory([Array(9).fill(null)]);
+    setCurrentMove(0);
+    setShowModal(false);
+  }
+
   const moves = history.map((squares, move) => {
     let description = "";
     if (move > 0) {
@@ -104,7 +112,7 @@ export default function Game() {
     <>
       {winner && <Confetti />}
       {showModal && (
-        <Modal winner={winner} onClose={() => setShowModal(false)} />
+        <Modal winner={winner.player} onClose={() => setShowModal(false)} />
       )}
       <h1>Tic Tac Toe</h1>
       <div className="game">
@@ -113,9 +121,11 @@ export default function Game() {
             xIsNext={xIsNext}
             squares={currentSquares}
             onPlay={handlePlay}
+            winningSquares={winner ? winner.line : []}
           />
         </div>
         <div className="game-info">
+          <button onClick={restartGame}>Restart Game</button>
           <ol>{moves}</ol>
         </div>
       </div>
@@ -138,7 +148,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return { player: squares[a], line: lines[i] };
     }
   }
 
