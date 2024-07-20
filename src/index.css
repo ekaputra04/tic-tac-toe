@@ -163,3 +163,18 @@ h1 {
 .modal button:hover {
   background-color: #0056b3;
 }
+
+/* Winning Square Styles */
+.winning-square {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+/* Restart Button Styles */
+.game-info button.restart {
+  background-color: #dc3545;
+}
+
+.game-info button.restart:hover {
+  background-color: #c82333;
+}
